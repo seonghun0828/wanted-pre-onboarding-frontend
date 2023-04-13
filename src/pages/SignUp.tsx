@@ -1,6 +1,8 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
+import { postSignUp } from '../axios_fns/postSignUp.ts';
+import { useNavigate } from 'react-router-dom';
 
-interface InputsType {
+export interface InputsType {
   email: string;
   password: string;
 }
@@ -12,6 +14,7 @@ const SignUp = () => {
   });
 
   const [isValidated, setIsValidated] = useState(false);
+  const navigate = useNavigate();
 
   const validate = () => {
     if (inputs.email.includes('@') && inputs.password.length >= 8) {
@@ -26,6 +29,13 @@ const SignUp = () => {
       ...prev,
       [e.target.id]: e.target.value,
     }));
+  };
+
+  const clickHandler = async () => {
+    postSignUp(inputs).then(() => {
+      window.alert('회원 가입이 완료되었습니다!');
+      navigate('/signin');
+    });
   };
 
   useEffect(() => {
@@ -66,6 +76,7 @@ const SignUp = () => {
               isValidated ? 'bg-blue-300 cursor-pointer' : 'bg-slate-300'
             }`}
             disabled={!isValidated}
+            onClick={clickHandler}
             data-testid="signup-button"
           >
             회원가입
