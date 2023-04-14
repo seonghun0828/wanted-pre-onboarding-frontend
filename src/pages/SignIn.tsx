@@ -27,7 +27,7 @@ const SignIn = () => {
     <div className="flex justify-center w-full p-10">
       <div className="flex flex-col justify-center w-1/2 gap-2">
         <div className="flex justify-center">
-          <h1 className="text-2xl">Sign ip</h1>
+          <h1 className="text-2xl">Sign in</h1>
         </div>
         <div className="flex justify-center gap-2">
           <label htmlFor="email">email</label>
