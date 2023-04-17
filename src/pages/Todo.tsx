@@ -1,7 +1,8 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { createTodo } from '../axios_fns/createTodo.ts';
+import { getTodos } from '../axios_fns/getTodos.ts';
 
-interface TodoType {
+export interface TodoType {
   id: number;
   todo: string;
   isCompleted: boolean;
@@ -20,6 +21,11 @@ const Todo = () => {
   const changeTextHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
   };
+
+  useEffect(() => {
+    getTodos().then((todos) => setTodos(todos));
+  }, []);
+
   return (
     <div className="flex justify-center w-full p-10">
       <div className="flex flex-col justify-center w-1/2 gap-2">
