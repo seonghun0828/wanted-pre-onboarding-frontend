@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { createTodo } from '../axios_fns/createTodo.ts';
 import { getTodos } from '../axios_fns/getTodos.ts';
+import { updateTodo } from '../axios_fns/updateTodo.ts';
 
 export interface TodoType {
   id: number;
@@ -20,6 +21,16 @@ const Todo = () => {
   };
   const changeTextHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
+  };
+
+  const changeCheckboxHandler = async (todo: TodoType) => {
+    const updatedTodo = await updateTodo({
+      ...todo,
+      isCompleted: !todo.isCompleted,
+    });
+    setTodos((prev) =>
+      prev.map((prevTodo) => (prevTodo.id === todo.id ? updatedTodo : prevTodo))
+    );
   };
 
   useEffect(() => {
@@ -48,11 +59,15 @@ const Todo = () => {
             </button>
           </div>
           <ul className="flex flex-col">
-            {todos.map(({ id, todo, isCompleted }) => (
-              <li key={id}>
-                <label className="flex gap-2" htmlFor="">
-                  <input type="checkbox" checked={isCompleted} />
-                  <span>{todo}</span>
+            {todos.map((todo) => (
+              <li key={todo.id}>
+                <label className="flex gap-2">
+                  <input
+                    type="checkbox"
+                    checked={todo.isCompleted}
+                    onChange={() => changeCheckboxHandler(todo)}
+                  />
+                  <span>{todo.todo}</span>
                 </label>
               </li>
             ))}
