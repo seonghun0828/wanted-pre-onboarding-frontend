@@ -2,6 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import { createTodo } from '../axios_fns/createTodo.ts';
 import { getTodos } from '../axios_fns/getTodos.ts';
 import { updateTodo } from '../axios_fns/updateTodo.ts';
+import { deleteTodo } from '../axios_fns/deleteTodo.ts';
 
 export interface TodoType {
   id: number;
@@ -30,6 +31,12 @@ const Todo = () => {
     });
     setTodos((prev) =>
       prev.map((prevTodo) => (prevTodo.id === todo.id ? updatedTodo : prevTodo))
+    );
+  };
+
+  const clickDeleteHandler = (clickedId: number) => {
+    deleteTodo(clickedId).then(() =>
+      setTodos((prev) => prev.filter(({ id }) => id !== clickedId))
     );
   };
 
@@ -68,6 +75,18 @@ const Todo = () => {
                     onChange={() => changeCheckboxHandler(todo)}
                   />
                   <span>{todo.todo}</span>
+                  <div>
+                    <button className="border" data-testid="modify-button">
+                      수정
+                    </button>
+                    <button
+                      className="border"
+                      onClick={() => clickDeleteHandler(todo.id)}
+                      data-testid="delete-button"
+                    >
+                      삭제
+                    </button>
+                  </div>
                 </label>
               </li>
             ))}
